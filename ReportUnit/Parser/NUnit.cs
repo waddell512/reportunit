@@ -194,6 +194,11 @@ namespace ReportUnit.Parser
                     test.CategoryList.AddRange(categories);
                     report.CategoryList.AddRange(categories);
 
+                    //Get scenario
+                    test.Scenario = null == parameterizedTestElement
+                        ? this.GetScenario(tc)
+                        : this.GetScenario(parameterizedTestElement);
+
 
                     // error and other status messages
                     test.StatusMessage = 
@@ -258,6 +263,38 @@ namespace ReportUnit.Parser
             }
 
             return categories;
+        }
+
+        /// <summary>
+        /// Builds a scenario object from properties on the provided element
+        /// </summary>
+        /// <param name="elem"></param>
+        /// <returns></returns>
+        private Scenario GetScenario(XElement elem)
+        {
+            Scenario scenario = null;
+            var property = elem.Descendants("property")
+                .Where(c => c.Attribute("name").Value.Equals("Scenario", StringComparison.CurrentCultureIgnoreCase))
+                .FirstOrDefault();
+
+            if (property != null)
+            {                
+                var value = property.Attribute("value").Value;
+                var strings = value.Split(new string[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
+
+                if (strings.Any())
+                {
+                    scenario = new Scenario();
+                    scenario.Title = strings[0];
+
+                    for (var i = 1; i < strings.Length; i++)
+                    {
+                        scenario.Steps.Add(strings[i].Trim());
+                    }
+                }
+            }
+
+            return scenario;
         }
 
         private RunInfo CreateRunInfo(XDocument doc, Report report)

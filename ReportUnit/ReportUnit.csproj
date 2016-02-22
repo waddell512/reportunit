@@ -53,6 +53,7 @@
     <Compile Include="Logging\Log.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Model\CompositeTemplate.cs" />
+    <Compile Include="Model\Scenario.cs" />
     <Compile Include="Parser\Gallio.cs" />
     <Compile Include="Parser\IParser.cs" />
     <Compile Include="Parser\MSTest2010.cs" />

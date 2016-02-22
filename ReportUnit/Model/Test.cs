@@ -31,6 +31,8 @@ namespace ReportUnit.Model
         /// </summary>
         public double Duration { get; set; }
 
+        public Scenario Scenario { get; set; }
+
         /// <summary>
         /// Categories & features associated with the test
         /// </summary>

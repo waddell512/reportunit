@@ -33,7 +33,7 @@ namespace ReportUnit.Templates
                     <meta name='author' content=''>
                     <title>ReportUnit TestRunner Report</title>
                     <link href='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.2/css/materialize.min.css' rel='stylesheet' type='text/css'>
-                    <link href='https://cdn.rawgit.com/reportunit/reportunit/005dcf934c5a53e60b9ec88a2a118930b433c453/cdn/reportunit.css' type='text/css' rel='stylesheet' />
+                    <link href='cdn/reportunit.css' type='text/css' rel='stylesheet' />
                     
                 </head>
                 <body>
@@ -200,6 +200,10 @@ namespace ReportUnit.Templates
                                                             <table class='bordered'>
                                                                 <thead>
                                                                     <tr>
+                                                                        @if (Model.TestSuiteList.Count > 0 && Model.TestSuiteList[ix].TestList.Any(x => x.Scenario != null))
+                                                                        {
+                                                                            <th>Scenario</th>
+                                                                        }
                                                                         <th>TestName</th>
                                                                         <th>Status</th>
                                                                         @if (Model.TestSuiteList.Count > 0 && Model.TestSuiteList[ix].TestList.Any(x => x.CategoryList.Count > 0))
@@ -216,6 +220,19 @@ namespace ReportUnit.Templates
                                                                     @foreach (var test in Model.TestSuiteList[ix].TestList)
                                                                     {
                                                                         <tr class='@test.Status.ToString().ToLower() test-status'>
+                                                                            @if (Model.TestSuiteList.Count > 0 && Model.TestSuiteList[ix].TestList.Any(x => x.Scenario != null))
+                                                                            {
+                                                                                <td class='test-scenario'>
+                                                                                    @if(test.Scenario != null)
+                                                                                    {
+                                                                                        <p class='scenario-title'>@test.Scenario.Title</p>
+                                                                                        foreach(var step in test.Scenario.Steps)
+                                                                                        {
+                                                                                            <p>@step</p>
+                                                                                        }
+                                                                                    }
+                                                                                </td>
+                                                                            }
                                                                             <td class='test-name'>
                                                                                 @{var testName = test.Name.Replace(""<"", ""&lt;"").Replace("">"", ""&gt;"");}
                                                                                 @if (!String.IsNullOrEmpty(@test.Description))
@@ -236,12 +253,12 @@ namespace ReportUnit.Templates
                                                                                 <td>
                                                                                     @if (test.CategoryList.Count > 0)
                                                                                     {
-                                                                                        <div class='category-list'>
+                                                                                        <ul class='category-list'>
                                                                                             @foreach (var cat in test.CategoryList)
                                                                                             {
-                                                                                                <span class='label category'>@cat</span>
+                                                                                                <li class='label category'>@cat</li>
                                                                                             }
-                                                                                        </div>
+                                                                                        </ul>
                                                                                     }
                                                                                 </td>
                                                                             }
@@ -329,7 +346,7 @@ namespace ReportUnit.Templates
                 <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js'></script> 
                 <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.2/js/materialize.min.js'></script> 
                 <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'></script>
-                <script src='https://cdn.rawgit.com/reportunit/reportunit/005dcf934c5a53e60b9ec88a2a118930b433c453/cdn/reportunit.js' type='text/javascript'></script>
+                <script src='cdn/reportunit.js' type='text/javascript'></script>
 
             </html>
             ".Replace("\r\n", "").Replace("\t", "").Replace("    ", ""); 
